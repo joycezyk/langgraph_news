@@ -1,0 +1,12 @@
+# secrets
+.env
+
+# python
+__pycache__/
+*.pyc
+.venv/
+.conda/
+
+# mac
+.DS_Store
+
