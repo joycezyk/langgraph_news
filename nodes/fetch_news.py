@@ -24,8 +24,8 @@ def fetch_news(state: Dict[str, Any]) -> Dict[str, Any]:
     if not since or not until:
         raise ValueError("state must contain 'since_ts' and 'until_ts' (ISO strings).")
 
-    query = state.get("query") or "finance OR economy OR markets OR stocks OR crypto"
-    domains = state.get("domains")  # optional
+    query = "US stocks OR Federal Reserve OR CPI OR Bitcoin"
+    domains = state.get("domains") 
     language = state.get("language") or "en"
 
     base_params = {
@@ -46,7 +46,7 @@ def fetch_news(state: Dict[str, Any]) -> Dict[str, Any]:
         params = dict(base_params)
         params["page"] = page
 
-        # ✅ 关键：这里用 NEWS_ENDPOINT，不用 url 变量名
+
         resp = requests.get(NEWS_ENDPOINT, params=params, timeout=30)
         if resp.status_code != 200:
             raise RuntimeError(f"NewsAPI error {resp.status_code}: {resp.text}")
@@ -54,7 +54,7 @@ def fetch_news(state: Dict[str, Any]) -> Dict[str, Any]:
         articles = resp.json().get("articles", [])
 
         for a in articles:
-            link = a.get("url", "")  # ✅ 关键：这里别叫 url，避免和 endpoint 混
+            link = a.get("url", "")  
             if not link:
                 continue
             all_articles.append({
@@ -69,7 +69,7 @@ def fetch_news(state: Dict[str, Any]) -> Dict[str, Any]:
         if len(articles) < base_params["pageSize"]:
             break
 
-    # 去重
+
     seen = set()
     deduped = []
     for item in all_articles:
